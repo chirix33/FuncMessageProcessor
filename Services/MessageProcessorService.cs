@@ -15,7 +15,6 @@ using Catalyst.Models;
 using Mosaik.Core;
 using System.Text.Json;
 using FuncMessageProcessor.Services;
-using FuncMessageProcessor.Models;
 using Microsoft.Graph.Models;
 
 namespace FuncMessageProcessor.Services
@@ -43,7 +42,7 @@ namespace FuncMessageProcessor.Services
             _logger = logger;
             _serviceProvider = serviceProvider.BuildServiceProvider();
             _kernel = _serviceProvider.GetRequiredService<Kernel>();
-            entitesTopicsPromptTemplate = appConfig.entitiestopics;
+            entitesTopicsPromptTemplate = appConfig.aidata;
             tagsPromptTemplate = appConfig.tags;
             _promptTemplateService = promptTemplateService;
             _serializationService = serializationService;
@@ -82,8 +81,8 @@ namespace FuncMessageProcessor.Services
             inputMessage.AiData.Cleaned = textOnlyContent;
 
             // Get the tags of the email body
-            var tags = await AssignTags(textOnlyContent);
-            inputMessage.AiData.Tags = tags;
+            //var tags = await AssignTags(textOnlyContent);
+            //inputMessage.AiData.Tags = tags;
 
             _logger.LogInformation($"Input Message: ${JsonSerializer.Serialize(inputMessage)}");
 
@@ -104,8 +103,7 @@ namespace FuncMessageProcessor.Services
                 #pragma warning disable SKEXP0010
                 OpenAIPromptExecutionSettings settings = new OpenAIPromptExecutionSettings()
                 {
-                    ResponseFormat = typeof(EntitiesAndTopics)
-                    //ResponseFormat = "json_object"
+                    ResponseFormat = typeof(AiData)
                 };
 
                 KernelFunction dcfunc = await _promptTemplateService.CreateKernelFunction(entitesTopicsPromptTemplate, arguments, "handlebars", executionSettings: settings);

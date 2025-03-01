@@ -8,7 +8,7 @@ namespace FuncMessageProcessor.Models
 {
     public class AppConfigModel
     {
-        public string entitiestopics { get; set; } = string.Empty;
+        public string aidata { get; set; } = string.Empty;
         public string tags { get; set; } = string.Empty;
 
     }
