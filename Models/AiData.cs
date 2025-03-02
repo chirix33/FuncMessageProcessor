@@ -38,6 +38,9 @@ namespace FuncMessageProcessor.Models
 
         [JsonPropertyName("questions")]
         public List<Question> Questions { get; set; } = null;
+
+        //public List<Dictionary<string, object>>? Tags { get; set; }
+
     }
 
     //public class AiData
