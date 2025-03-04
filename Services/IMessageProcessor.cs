@@ -9,9 +9,6 @@ namespace FuncMessageProcessor.Services
 {
     public interface IMessageProcessor
     {
-        Task ProcessMessage(EnrichedMessage inputMessage);
-        Task<AiData> ExtractEntitiesAndTopics(String content);
-        Task<Tags> AssignTags(String content);
-        Task<String> DecomposeMessage(String content);
+        void ProcessMessage(EnrichedMessage inputMessage);
     }
 }

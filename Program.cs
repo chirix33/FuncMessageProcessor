@@ -46,11 +46,7 @@ namespace FuncMessageProcessor
                         // 3) Return the config so it's cached in DI
                         return typedConfig;
                     });
-                    services.AddTransient<IKernelService, KernelService>();
-                    services.AddTransient<ICosmosUtilsService, CosmosUtilsService>();
-                    services.AddScoped<PromptTemplateService>();
                     services.AddScoped<IMessageProcessor, MessageProcessorService>();
-                    services.AddScoped<SerializationService>();
                     services.AddApplicationInsightsTelemetryWorkerService();
                     services.ConfigureFunctionsApplicationInsights();
                     services.Configure<JsonSerializerOptions>(options =>

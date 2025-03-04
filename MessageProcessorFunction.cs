@@ -27,17 +27,17 @@ namespace FuncMessageProcessor
 
         [Function("MessageProcessor")]
         [BlobOutput("%PROCESSED_MESSAGE_CONTAINER%/{filename}")]
-        public async Task<IActionResult> Run(
+        public IActionResult Run(
         [BlobTrigger("%MESSAGE_CONTAINER%/{filename}")] EnrichedMessage blobMessage)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("C# Blob trigger function processed a request.");
 
             if (blobMessage == null)
             {
                 return new BadRequestObjectResult("Please pass a message in the request body");
             }
 
-            await _messageProcessor.ProcessMessage(blobMessage);
+            _messageProcessor.ProcessMessage(blobMessage);
 
             return new OkObjectResult(JsonSerializer.Serialize(blobMessage));
         }
