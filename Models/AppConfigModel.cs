@@ -10,6 +10,5 @@ namespace FuncMessageProcessor.Models
     {
         public string aidata { get; set; } = string.Empty;
         public string tags { get; set; } = string.Empty;
-
     }
 }

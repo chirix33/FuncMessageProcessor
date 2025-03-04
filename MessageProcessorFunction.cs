@@ -1,15 +1,19 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
 using System.Net;
 using FuncMessageProcessor.Models;
 using FuncMessageProcessor.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using FromBodyAttribute = Microsoft.Azure.Functions.Worker.Http.FromBodyAttribute;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
 namespace FuncMessageProcessor
 {
+    [StorageAccount("STORAGE_ACCOUNT")]
     public class MessageProcessorFunction
     {
         private readonly ILogger _logger;
@@ -22,8 +26,9 @@ namespace FuncMessageProcessor
         }
 
         [Function("MessageProcessor")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req,
-            [FromBody] EnrichedMessage blobMessage)
+        [BlobOutput("%PROCESSED_MESSAGE_CONTAINER%/{filename}")]
+        public async Task<IActionResult> Run(
+        [BlobTrigger("%MESSAGE_CONTAINER%/{filename}")] EnrichedMessage blobMessage)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -34,7 +39,7 @@ namespace FuncMessageProcessor
 
             await _messageProcessor.ProcessMessage(blobMessage);
 
-            return new OkObjectResult(blobMessage);
+            return new OkObjectResult(JsonSerializer.Serialize(blobMessage));
         }
     }
 }
